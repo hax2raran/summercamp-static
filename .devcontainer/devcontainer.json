@@ -1,0 +1,43 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
+{
+    "name": "Alpine with Nginx",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
+
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    "features": {
+        // Use the common-utils feature to install necessary utilities like git, zsh, etc.
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": "false",
+            "installOhMyZsh": "false",
+            "upgradePackages": "true"
+        },
+        // Install Nginx, though the base image might not be ideal for this specific feature.
+        // For a more robust Nginx setup, consider using a Dockerfile from the 'nginx:alpine' image.
+        // As a simple devcontainer Feature for basic Nginx on Alpine base:
+        "ghcr.io/devcontainers/features/nginx:1": {
+            "version": "latest"
+        }
+    },
+
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // Nginx typically runs on port 80 inside the container. We forward it to 8080 on the host.
+    "forwardPorts": [8080], 
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // This command installs Nginx on the base Alpine image. 
+    // **Note**: The Nginx feature above should handle the installation, but this is a fallback 
+    // or alternative method for demonstration if the feature's image compatibility is an issue.
+    // **Also Note**: The Nginx Dev Container Feature may handle installation and a basic config.
+    // For manual static code deployment, you'd usually copy files to /usr/share/nginx/html.
+    // Assuming your static code is in a local 'html' folder, you might use a `mounts` property 
+    // (not shown here to keep it concise) or copy/move files here.
+    "postCreateCommand": "apk add --no-cache nginx && echo '<h1>Hello from Dev Container Nginx!</h1>' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;' &",
+
+    // Configure tool-specific properties.
+    // "customizations": {},
+
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+}
